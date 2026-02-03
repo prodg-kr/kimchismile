@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kimchi Smile - Professional K-Photo Studio in Seoul</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        :root {
+            --primary: #FF1744;
+            --secondary: #7C4DFF;
+            --accent: #FFD600;
+            --dark: #1a1a2e;
+            --light: #f8f9fa;
+            --gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: var(--dark);
+            overflow-x: hidden;
+        }
+        .lang-selector {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+            background: rgba(255, 255, 255, 0.95);
+            padding: 10px 15px;
+            border-radius: 30px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            backdrop-filter: blur(10px);
+        }
+        .lang-selector select {
+            border: none;
+            background: transparent;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            outline: none;
+            color: var(--dark);
+        }
+        header {
+            background: var(--gradient);
+            color: white;
+            padding: 100px 20px 80px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320"><path fill="rgba(255,255,255,0.1)" d="M0,96L48,112C96,128,192,160,288,160C384,160,480,128,576,122.7C672,117,768,139,864,138.7C960,139,1056,117,1152,101.3C1248,85,1344,75,1392,69.3L1440,64L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"></path></svg>') no-repeat bottom;
+            background-size: cover;
+        }
+        .logo { font-size: 3em; font-weight: bold; margin-bottom: 20px; animation: fadeInDown 1s; }
+        .tagline { font-size: 1.5em; margin-bottom: 30px; animation: fadeInUp 1s; }
+        .cta-button {
+            display: inline-block;
+            padding: 15px 40px;
+            background: var(--accent);
+            color: var(--dark);
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: bold;
+            font-size: 1.1em;
+            transition: all 0.3s;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            animation: pulse 2s infinite;
+        }
+        .cta-button:hover { transform: translateY(-3px); box-shadow: 0 15px 40px rgba(0,0,0,0.3); }
+        .container { max-width: 1200px; margin: 0 auto; padding: 0 20px; }
+        .services { padding: 80px 20px; background: var(--light); }
+        .section-title { text-align: center; font-size: 2.5em; margin-bottom: 50px; color: var(--dark); }
+        .service-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; margin-top: 40px; }
+        .service-card { background: white; padding: 40px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); transition: all 0.3s; position: relative; overflow: hidden; }
+        .service-card::before { content: '';position: absolute; top: 0; left: 0; width: 100%; height: 5px; background: var(--gradient); }
+        .service-card:hover { transform: translateY(-10px); box-shadow: 0 20px 50px rgba(0,0,0,0.15); }
+        .service-icon { font-size: 3em; margin-bottom: 20px; }
+        .service-card h3 { font-size: 1.5em; margin-bottom: 15px; color: var(--secondary); }
+        .packages { padding: 80px 20px; background: white; }
+        .package-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 30px; margin-top: 40px; }
+        .package-card { background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%); padding: 40px 30px; border-radius: 20px; text-align: center; transition: all 0.3s; border: 3px solid transparent; }
+        .package-card:hover { border-color: var(--primary); transform: scale(1.05); }
+        .package-card.featured { background: var(--gradient); color: white; transform: scale(1.05); }
+        .price { font-size: 2.5em; font-weight: bold; margin: 20px 0; }
+        .features { list-style: none; margin: 20px 0; }
+        .features li { padding: 10px 0; border-bottom: 1px solid rgba(255,255,255,0.2); }
+        .booking { padding: 80px 20px; background: var(--gradient); color: white; text-align: center; }
+        .booking-form { max-width: 600px; margin: 40px auto; background: white; padding: 40px; border-radius: 20px; box-shadow: 0 20px 60px rgba(0,0,0,0.3); }
+        .form-group { margin-bottom: 20px; text-align: left; }
+        .form-group label { display: block; margin-bottom: 8px; color: var(--dark); font-weight: 600; }
+        .form-group input, .form-group select, .form-group textarea { width: 100%; padding: 12px; border: 2px solid #e0e0e0; border-radius: 10px; font-size: 1em; transition: all 0.3s; }
+        .form-group input:focus, .form-group select:focus, .form-group textarea:focus { border-color: var(--secondary); outline: none; }
+        .submit-btn { width: 100%; padding: 15px; background: var(--gradient); color: white; border: none; border-radius: 50px; font-size: 1.1em; font-weight: bold; cursor: pointer; transition: all 0.3s; }
+        .submit-btn:hover { transform: translateY(-2px); box-shadow: 0 10px 30px rgba(0,0,0,0.2); }
+        .gallery { padding: 80px 20px; background: var(--light); }
+        .gallery-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; margin-top: 40px; }
+        .gallery-item { height: 300px; background: var(--gradient); border-radius: 15px; overflow: hidden; position: relative; cursor: pointer; transition: all 0.3s; }
+        .gallery-item:hover { transform: scale(1.05); box-shadow: 0 15px 40px rgba(0,0,0,0.2); }
+        footer { background: var(--dark); color: white; padding: 40px 20px;text-align: center; }
+        .social-links { margin: 20px 0; }
+        .social-links a { display: inline-block; margin: 0 10px; color: white; font-size: 1.5em; transition: all 0.3s; }
+        .social-links a:hover { color: var(--accent); transform: translateY(-3px); }
+        @keyframes fadeInDown { from { opacity: 0; transform: translateY(-30px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes fadeInUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.05); } }
+        .kpop-quiz { background: linear-gradient(135deg, #FF1744 0%, #7C4DFF 100%); color: white; padding: 80px 20px; }
+        .quiz-card { background: rgba(255, 255, 255, 0.1); backdrop-filter: blur(10px); padding: 40px; border-radius: 20px; border: 2px solid rgba(255, 255, 255, 0.2); }
+        @media (max-width: 768px) { .logo { font-size: 2em; } .tagline { font-size: 1.2em; } .section-title { font-size: 2em; } }
+    </style>
+</head>
+<body>
+    <div class="lang-selector">
+        <select id="language" onchange="changeLanguage()">
+            <option value="ko">🇰🇷 한국어</option>
+            <option value="en">🇺🇸 English</option>
+            <option value="ja">🇯🇵 日本語</option>
+            <option value="zh">🇨🇳 中文</option>
+        </select>
+    </div>
+    <header>
+        <div class="logo" data-lang="title">😊 Kimchi Smile</div>
+        <p class="tagline" data-lang="tagline">서울에서 당신만의 특별한 순간을 K-스타일로 담아드립니다</p>
+        <a href="#booking" class="cta-button" data-lang="cta">지금 예약하기</a>
+    </header>
+    <section class="services">
+        <div class="container">
+            <h2 class="section-title" data-lang="services-title">Our Services</h2>
+            <div class="service-grid">
+                <div class="service-card">
+                    <div class="service-icon">📸</div>
+                    <h3 data-lang="service1-title">한복 포토촬영</h3>
+                    <p data-lang="service1-desc">전통 한복을 입고 한국의 아름다움을 사진에 담아보세요. 전문 스타일리스트와 메이크업 아티스트가 함께합니다.</p>
+                </div>
+                <div class="service-card">
+                    <div class="service-icon">🎭</div>
+                    <h3 data-lang="service2-title">K-POP 컨셉 촬영</h3>
+                    <p data-lang="service2-desc">좋아하는 K-POP 스타처럼! 최신 트렌드의 스타일과 세트로 잊지 못할 사진을 만들어드립니다.</p>
+                </div>
+                <div class="service-card">
+                    <div class="service-icon">🎮</div>
+                    <h3 data-lang="service3-title">K-POP Quiz Game</h3>
+                    <p data-lang="service3-desc">재미있는 K-POP 퀴즈로 한국 문화를 경험하고, 상품도 받아가세요!</p>
+                </div>
+            </div>
+        </div>
+    </section>
+    <section class="packages">
+        <div class="container">
+            <h2 class="section-title" data-lang="packages-title">촬영 패키지</h2>
+            <div class="package-grid">
+                <div class="package-card">
+                    <h3 data-lang="package1-name">베이직</h3>
+                    <div class="price">₩79,000</div>
+                    <ul class="features">
+                        <li data-lang="package1-feat1">30분 촬영</li>
+                        <li data-lang="package1-feat2">의상 1벌 제공</li>
+                        <li data-lang="package1-feat3">보정 사진 10장</li>
+                        <li data-lang="package1-feat4">디지털 파일 제공</li>
+                    </ul>
+                </div>
+                <div class="package-card featured">
+                    <h3 data-lang="package2-name">프리미엄 ⭐</h3>
+                    <div class="price">₩149,000</div>
+                    <ul class="features">
+                        <li data-lang="package2-feat1">60분 촬영</li>
+                        <li data-lang="package2-feat2">의상 3벌 + 액세서리</li>
+                        <li data-lang="package2-feat3">보정 사진 30장</li>
+                        <li data-lang="package2-feat4">메이크업 포함</li>
+                        <li data-lang="package2-feat5">포토북 제작</li>
+                    </ul>
+                </div>
+                <div class="package-card">
+                    <h3 data-lang="package3-name">VIP</h3>
+                    <div class="price">₩249,000</div>
+                    <ul class="features">
+                        <li data-lang="package3-feat1">90분 촬영</li>
+                        <li data-lang="package3-feat2">무제한 의상</li>
+                        <li data-lang="package3-feat3">보정 사진 50장</li>
+                        <li data-lang="package3-feat4">헤어+메이크업 풀코스</li>
+                        <li data-lang="package3-feat5">외부 촬영 포함</li>
+                        <li data-lang="package3-feat6">포토북 + 액자</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+    <section class="kpop-quiz">
+        <div class="container">
+            <h2 class="section-title" data-lang="quiz-title">K-POP Quiz Challenge</h2>
+            <div class="quiz-card">
+                <p data-lang="quiz-desc">K-POP을 얼마나 알고 계신가요? 재미있는 퀴즈를 풀고 특별한 할인 쿠폰을 받아가세요!</p>
+                <br>
+                <a href="#quiz" class="cta-button" data-lang="quiz-cta">퀴즈 시작하기</a>
+            </div>
+        </div>
+    </section>
+    <section class="booking" id="booking">
+        <div class="container">
+            <h2 class="section-title" data-lang="booking-title">예약하기</h2>
+            <div class="booking-form">
+                <form id="reservationForm">
+                    <div class="form-group">
+                        <label data-lang="form-name">이름 *</label>
+                        <input type="text" required>
+                    </div>
+                    <div class="form-group">
+                        <label data-lang="form-email">이메일 *</label>
+                        <input type="email" required>
+                    </div>
+                    <div class="form-group">
+                        <label data-lang="form-phone">전화번호 *</label>
+                        <input type="tel" required>
+                    </div>
+                    <div class="form-group">
+                        <label data-lang="form-date">희망 날짜 *</label>
+                        <input type="date" required>
+                    </div>
+                    <div class="form-group">
+                        <label data-lang="form-package">패키지 선택 *</label>
+                        <select required>
+                            <option value="" data-lang="form-select">선택해주세요</option>
+                            <option value="basic" data-lang="package1-name">베이직</option>
+                            <option value="premium" data-lang="package2-name">프리미엄</option>
+                            <option value="vip" data-lang="package3-name">VIP</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label data-lang="form-message">특별 요청사항</label>
+                        <textarea rows="4"></textarea>
+                    </div>
+                    <button type="submit" class="submit-btn" data-lang="form-submit">예약 신청하기</button>
+                </form>
+            </div>
+        </div>
+    </section>
+    <footer>
+        <div class="container">
+            <h3>Kimchi Smile Photo Studio</h3>
+            <p>📍 Seoul, Gangnam-gu</p>
+            <p>📧 hello@kimchismile.com | 📱 +82-10-XXXX-XXXX</p>
+            <div class="social-links">
+                <a href="#">📷</a><a href="#">💬</a> <a href="#">🎵</a>
+            </div>
+            <p style="margin-top: 20px; opacity: 0.8;">© 2026 Kimchi Smile. All rights reserved.</p>
+        </div>
+    </footer>
+    <script>
+        const translations = {
+            ko: {
+                title: "😊 Kimchi Smile",
+                tagline: "서울에서 당신만의 특별한 순간을 K-스타일로 담아드립니다",
+                cta: "지금 예약하기",
+                "services-title": "Our Services",
+                "service1-title": "한복 포토촬영",
+                "service1-desc": "전통 한복을 입고 한국의 아름다움을 사진에 담아보세요. 전문 스타일리스트와 메이크업 아티스트가 함께합니다.",
+                "service2-title": "K-POP 컨셉 촬영",
+                "service2-desc": "좋아하는 K-POP 스타처럼! 최신 트렌드의 스타일과 세트로 잊지 못할 사진을 만들어드립니다.",
+                "service3-title": "K-POP Quiz Game",
+                "service3-desc": "재미있는 K-POP 퀴즈로 한국 문화를 경험하고, 상품도 받아가세요!",
+                "packages-title": "촬영 패키지",
+                "package1-name": "베이직",
+                "package1-feat1": "30분 촬영",
+                "package1-feat2": "의상 1벌 제공",
+                "package1-feat3": "보정 사진 10장",
+                "package1-feat4": "디지털 파일 제공",
+                "package2-name": "프리미엄 ⭐",
+                "package2-feat1": "60분 촬영",
+                "package2-feat2": "의상 3벌 + 액세서리",
+                "package2-feat3": "보정 사진 30장",
+                "package2-feat4": "메이크업 포함",
+                "package2-feat5": "포토북 제작",
+                "package3-name": "VIP",
+                "package3-feat1": "90분 촬영",
+                "package3-feat2": "무제한 의상",
+                "package3-feat3": "보정 사진 50장",
+                "package3-feat4": "헤어+메이크업 풀코스",
+                "package3-feat5": "외부 촬영 포함",
+                "package3-feat6": "포토북 + 액자",
+                "quiz-title": "K-POP Quiz Challenge",
+                "quiz-desc": "K-POP을 얼마나 알고 계신가요? 재미있는 퀴즈를 풀고 특별한 할인 쿠폰을 받아가세요!",
+                "quiz-cta": "퀴즈 시작하기",
+                "booking-title": "예약하기",
+                "form-name": "이름 *",
+                "form-email": "이메일 *",
+                "form-phone": "전화번호 *",
+                "form-date": "희망 날짜 *",
+                "form-package": "패키지 선택 *",
+                "form-select": "선택해주세요",
+                "form-message": "특별 요청사항",
+                "form-submit": "예약 신청하기"
+            },
+            en: {
+                title: "😊 Kimchi Smile",
+                tagline: "Capture Your Special Moments in K-Style in Seoul",
+                cta: "Book Now",
+                "services-title": "Our Services",
+                "service1-title": "Hanbok Photo Shoot",
+                "service1-desc": "Capture Korean beauty in traditional Hanbok. Professional stylists and makeup artists included.",
+                "service2-title": "K-POP Concept Shoot",
+                "service2-desc": "Look like your favorite K-POP star! Create unforgettable photos with trendy styles and sets.",
+                "service3-title": "K-POP Quiz Game",
+                "service3-desc": "Experience Korean culture through fun K-POP quizzes and win prizes!",
+                "packages-title": "Photo Packages",
+                "package1-name": "Basic",
+                "package1-feat1": "30-min session",
+                "package1-feat2": "1 outfit included",
+                "package1-feat3": "10 edited photos",
+                "package1-feat4": "Digital files",
+                "package2-name": "Premium ⭐",
+                "package2-feat1": "60-min session",
+                "package2-feat2": "3 outfits + accessories",
+                "package2-feat3": "30 edited photos",
+                "package2-feat4": "Makeup included",
+                "package2-feat5": "Photo book",
+                "package3-name": "VIP",
+                "package3-feat1": "90-min session",
+                "package3-feat2": "Unlimited outfits",
+                "package3-feat3": "50 edited photos",
+                "package3-feat4": "Hair + makeup full course",
+                "package3-feat5": "Outdoor shooting",
+                "package3-feat6": "Photo book + frame",
+                "quiz-title": "K-POP Quiz Challenge","quiz-desc": "How much do you know about K-POP? Take our fun quiz and get a special discount coupon!",
+                "quiz-cta": "Start Quiz",
+                "booking-title": "Book Your Session",
+                "form-name": "Name *",
+                "form-email": "Email *",
+                "form-phone": "Phone *",
+                "form-date": "Preferred Date *",
+                "form-package": "Select Package *",
+                "form-select": "Please select",
+                "form-message": "Special Requests",
+                "form-submit": "Submit Booking"
+            },
+            ja: {
+                title: "😊 キム치スマイル",
+                tagline: "ソウルで特別な瞬間をKスタイルで撮影",
+                cta: "今すぐ予約",
+                "services-title": "サービス内容",
+                "service1-title": "韓服フォト撮影",
+                "service1-desc": "伝統的な韓服を着て韓国の美しさを写真に残しましょう。プロのスタイリストとメイクアップアーティストが同行します。",
+                "service2-title": "K-POPコンセプト撮影",
+                "service2-desc": "お気に入りのK-POPスターのように!最新トレンドのスタイル과セットで忘れられない写真を作ります。",
+                "service3-title": "K-POPクイズゲーム",
+                "service3-desc": "楽しいK-POPクイズで韓国文化を体験し、プレゼントをゲット!",
+                "packages-title": "撮影パッケージ",
+                "package1-name": "ベーシック",
+                "package1-feat1": "30分撮影",
+                "package1-feat2": "衣装1着提供",
+                "package1-feat3": "補正写真10枚",
+                "package1-feat4": "デジタルファイル提供",
+                "package2-name": "プレミアム ⭐",
+                "package2-feat1": "60分撮影",
+                "package2-feat2": "衣装3着+アクセサリー",
+                "package2-feat3": "補정写真30枚",
+                "package2-feat4": "メイクアップ込み",
+                "package2-feat5": "フォトブック制作",
+                "package3-name": "VIP",
+                "package3-feat1": "90分撮影",
+                "package3-feat2": "無制限衣装",
+                "package3-feat3": "補正写真50枚",
+                "package3-feat4": "ヘア+メイクアップフルコース",
+                "package3-feat5": "屋外撮影込み",
+                "package3-feat6": "フォトブック+額縁",
+                "quiz-title": "K-POPクイズチャレンジ",
+                "quiz-desc": "K-POPをどれだけ知っていますか?楽しいクイズに挑戦して特別割引クーポンをゲット!",
+                "quiz-cta": "クイズスタート",
+                "booking-title": "予約する",
+                "form-name": "お名前 *",
+                "form-email": "メール *",
+                "form-phone": "電話番号 *",
+                "form-date": "希望日 *",
+                "form-package": "パッケージ選択 *",
+                "form-select": "選択してください",
+                "form-message": "特別なご要望",
+                "form-submit": "予約申請"
+            },
+            zh: {
+                title: "😊 泡菜微笑",
+                tagline: "在首尔用K-Style捕捉您的特别时刻",
+                cta: "立即预约",
+                "services-title": "我们的服务",
+                "service1-title": "韩服摄影",
+                "service1-desc": "穿上传统韩服,将韩国之美定格在照片中。专业造型师和化妆师随行。",
+                "service2-title": "K-POP概念摄影",
+                "service2-desc": "像您最喜欢的K-POP明星一样!用最新潮流的风格和布景创造难忘的照片。",
+                "service3-title": "K-POP问答游戏",
+                "service3-desc": "通过有趣的K-POP问答体验韩国文化,赢取奖品!",
+                "packages-title": "摄影套餐",
+                "package1-name": "基础型",
+                "package1-feat1": "30分钟拍摄",
+                "package1-feat2": "提供1套服装",
+                "package1-feat3": "10张精修照片",
+                "package1-feat4": "提供电子文件",
+                "package2-name": "高级型 ⭐",
+                "package2-feat1": "60分钟拍摄",
+                "package2-feat2": "3套服装 + 配饰",
+                "package2-feat3": "30张精修照片",
+                "package2-feat4": "包含化妆",
+                "package2-feat5": "制作相册",
+                "package3-name": "VIP型",
+                "package3-feat1": "90分钟拍摄",
+                "package3-feat2": "无限换装",
+                "package3-feat3": "50张精修照片",
+                "package3-feat4": "发型+化妆全套服务",
+                "package3-feat5": "包含外景拍摄",
+                "package3-feat6": "相册 + 相框",
+                "quiz-title": "K-POP问答挑战",
+                "quiz-desc": "您对K-POP了解多少?参加有趣的问答,赢取特别折扣券!",
+                "quiz-cta": "开始问答",
+                "booking-title": "现在预约",
+                "form-name": "姓名 *",
+                "form-email": "邮箱 *",
+                "form-phone": "电话号码 *",
+                "form-date": "预约日期 *",
+                "form-package": "选择套餐 *",
+                "form-select": "请选择",
+                "form-message": "特别要求",
+                "form-submit": "提交预约"
+            }
+        };
+
+        function changeLanguage() {
+            const lang = document.getElementById('language').value;
+            const elements = document.querySelectorAll('[data-lang]');
+            elements.forEach(el => {
+                const key = el.getAttribute('data-lang');
+                if (translations[lang][key]) {
+                    el.textContent = translations[lang][key];
+                }
+            });
+        }
+
+        document.getElementById('reservationForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            alert('예약 신청이 접수되었습니다! 곧 연락드리겠습니다. Booking received! We will contact you soon.');
+        });
+
+        // Smooth scroll
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth' });
+                }
+            });
+        });
+    </script>
+</body>
+</html>
